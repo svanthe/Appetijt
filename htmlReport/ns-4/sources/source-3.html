@@ -1,0 +1,130 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RecipeDao</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.svantheemsche.appetijt.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: RecipeDao (com.svantheemsche.appetijt.data.local.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">RecipeDao$Subclass0</td>
+  </tr>
+  <tr>
+    <td class="name">RecipeDao$Subclass0$auxiliary$jfJRKqC5</td>
+  </tr>
+  <tr>
+    <td class="name">RecipeDao$Subclass0$auxiliary$pMCBkM4s</td>
+  </tr>
+  <tr>
+    <td class="name">RecipeDao$Subclass0$auxiliary$qe7pskoP</td>
+  </tr>
+  <tr>
+    <td class="name">RecipeDao$Subclass0$auxiliary$XvhuBC9B</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Appetijt: A local-first meal planning Android application.
+&nbsp; * Copyright (C) 2026 Stefan Van Theemsche
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, either version 3 of the License, or
+&nbsp; * (at your option) any later version.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful,
+&nbsp; * but WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&nbsp; * GNU General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+&nbsp; */
+&nbsp;
+&nbsp;package com.svantheemsche.appetijt.data.local.dao
+&nbsp;
+&nbsp;import androidx.room.Dao
+&nbsp;import androidx.room.Insert
+&nbsp;import androidx.room.OnConflictStrategy
+&nbsp;import androidx.room.Query
+&nbsp;import com.svantheemsche.appetijt.data.local.entity.RecipeEntity
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;
+&nbsp;@Dao
+&nbsp;interface RecipeDao {
+&nbsp;    @Query(&quot;SELECT * FROM recipes WHERE id = :id&quot;)
+&nbsp;    suspend fun getRecipeById(id: Long): RecipeEntity?
+&nbsp;
+&nbsp;    @Insert(onConflict = OnConflictStrategy.REPLACE)
+&nbsp;    suspend fun insertRecipe(recipe: RecipeEntity): Long
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM recipes&quot;)
+&nbsp;    fun getAllRecipes(): Flow&lt;List&lt;RecipeEntity&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM recipes GROUP BY title ORDER BY title ASC&quot;)
+&nbsp;    fun getAllUniqueRecipes(): Flow&lt;List&lt;RecipeEntity&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM recipes WHERE title LIKE :searchQuery GROUP BY title ORDER BY title ASC&quot;)
+&nbsp;    fun searchInLibrary(searchQuery: String): Flow&lt;List&lt;RecipeEntity&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;DELETE FROM recipes WHERE id = :id&quot;)
+&nbsp;    suspend fun deleteById(id: Long)
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-05-31 11:37</div>
+</div>
+</body>
+</html>

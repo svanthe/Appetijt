@@ -1,0 +1,134 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MealPlanRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.svantheemsche.appetijt.domain.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: MealPlanRepository (com.svantheemsche.appetijt.domain.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$6p2QnoHL</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$7yLCJYbx</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$Ca0fVEp8</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$e6lyRSGX</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$Jt2UANeH</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$qg0Y0RKG</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$uGDQDEDl</td>
+  </tr>
+  <tr>
+    <td class="name">MealPlanRepository$Subclass0$auxiliary$Y3lTDT9m</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Appetijt: A local-first meal planning Android application.
+&nbsp; * Copyright (C) 2026 Stefan Van Theemsche
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, either version 3 of the License, or
+&nbsp; * (at your option) any later version.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful,
+&nbsp; * but WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&nbsp; * GNU General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+&nbsp; */
+&nbsp;
+&nbsp;package com.svantheemsche.appetijt.domain.repository
+&nbsp;
+&nbsp;import com.svantheemsche.appetijt.domain.model.Recipe
+&nbsp;import com.svantheemsche.appetijt.domain.model.WorkResult
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;import java.time.LocalDate
+&nbsp;
+&nbsp;interface MealPlanRepository {
+&nbsp;    suspend fun addRecipeFromSharedText(text: String, date: LocalDate): WorkResult&lt;Unit&gt;
+&nbsp;    suspend fun addRecipeFromSharedText(text: String, titleFallback: String?, date: LocalDate): WorkResult&lt;Unit&gt;
+&nbsp;    fun getRecipesForDate(date: LocalDate): Flow&lt;List&lt;Recipe&gt;&gt;
+&nbsp;    
+&nbsp;    suspend fun deleteMealEntry(date: LocalDate, recipeId: Long): WorkResult&lt;Unit&gt;
+&nbsp;    suspend fun updateRecipeDate(recipeId: Long, fromDate: LocalDate, toDate: LocalDate): WorkResult&lt;Unit&gt;
+&nbsp;    fun hasRecipesForDate(date: LocalDate): Flow&lt;Boolean&gt;
+&nbsp;
+&nbsp;    // Library
+&nbsp;    fun getAllUniqueRecipes(): Flow&lt;List&lt;Recipe&gt;&gt;
+&nbsp;    fun searchInLibrary(query: String): Flow&lt;List&lt;Recipe&gt;&gt;
+&nbsp;    suspend fun addRecipeToDate(recipe: Recipe, date: LocalDate): WorkResult&lt;Unit&gt;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-05-31 11:37</div>
+</div>
+</body>
+</html>

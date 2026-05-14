@@ -1,0 +1,417 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RecipeScraper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.svantheemsche.appetijt.data.scraper</a>
+</div>
+
+<h1>Coverage Summary for Class: RecipeScraper (com.svantheemsche.appetijt.data.scraper)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RecipeScraper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (18/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,1%
+  </span>
+  <span class="absValue">
+    (39/41)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RecipeScraper$executeRequest$2$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">RecipeScraper$executeRequest$2$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">RecipeScraper$scrape$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65%
+  </span>
+  <span class="absValue">
+    (13/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77,2%
+  </span>
+  <span class="absValue">
+    (44/57)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68,8%
+  </span>
+  <span class="absValue">
+    (33/48)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,6%
+  </span>
+  <span class="absValue">
+    (88/104)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Appetijt: A local-first meal planning Android application.
+&nbsp; * Copyright (C) 2026 Stefan Van Theemsche
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, either version 3 of the License, or
+&nbsp; * (at your option) any later version.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful,
+&nbsp; * but WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&nbsp; * GNU General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+&nbsp; */
+&nbsp;
+&nbsp;package com.svantheemsche.appetijt.data.scraper
+&nbsp;
+&nbsp;import android.util.Log
+&nbsp;import com.svantheemsche.appetijt.data.security.SourceExtractor
+&nbsp;import com.svantheemsche.appetijt.data.utils.HtmlSanitizer
+&nbsp;import com.svantheemsche.appetijt.domain.model.ErrorCodes
+&nbsp;import com.svantheemsche.appetijt.domain.model.Recipe
+&nbsp;import com.svantheemsche.appetijt.domain.model.WorkResult
+&nbsp;import kotlinx.coroutines.Dispatchers
+&nbsp;import kotlinx.coroutines.suspendCancellableCoroutine
+&nbsp;import kotlinx.coroutines.withContext
+&nbsp;import okhttp3.Call
+&nbsp;import okhttp3.Callback
+&nbsp;import okhttp3.ConnectionSpec
+&nbsp;import okhttp3.OkHttpClient
+&nbsp;import okhttp3.Request
+&nbsp;import okhttp3.Response
+&nbsp;import okhttp3.TlsVersion
+&nbsp;import okhttp3.logging.HttpLoggingInterceptor
+&nbsp;import org.jsoup.Jsoup
+&nbsp;import java.io.IOException
+&nbsp;import java.net.URL
+&nbsp;import java.net.UnknownHostException
+&nbsp;import java.util.concurrent.TimeUnit
+&nbsp;import kotlin.coroutines.resume
+&nbsp;
+<b class="fc">&nbsp;class RecipeScraper {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val loggingInterceptor = HttpLoggingInterceptor { message -&gt;</b>
+<b class="fc">&nbsp;        Log.d(&quot;RecipeScraperNetwork&quot;, message)</b>
+<b class="fc">&nbsp;    }.apply {</b>
+<b class="fc">&nbsp;        level = HttpLoggingInterceptor.Level.BASIC</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    // Enforce modern TLS versions for security (HIGH Finding Mitigation)
+<b class="fc">&nbsp;    private val connectionSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)</b>
+<b class="fc">&nbsp;        .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_3)</b>
+<b class="fc">&nbsp;        .build()</b>
+&nbsp;
+<b class="fc">&nbsp;    private val client = OkHttpClient.Builder()</b>
+<b class="fc">&nbsp;        .addInterceptor(loggingInterceptor)</b>
+<b class="fc">&nbsp;        .connectionSpecs(listOf(connectionSpec, ConnectionSpec.CLEARTEXT))</b>
+<b class="fc">&nbsp;        .connectTimeout(15, TimeUnit.SECONDS)</b>
+<b class="fc">&nbsp;        .readTimeout(15, TimeUnit.SECONDS)</b>
+<b class="fc">&nbsp;        .followRedirects(true)</b>
+<b class="fc">&nbsp;        .followSslRedirects(true)</b>
+<b class="fc">&nbsp;        .build()</b>
+&nbsp;
+&nbsp;    // High-quality Android Mobile User Agent
+<b class="fc">&nbsp;    private val userAgent = &quot;Mozilla/5.0 (Linux; Android 13; SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36&quot;</b>
+&nbsp;
+<b class="fc">&nbsp;    suspend fun scrape(url: String): WorkResult&lt;Recipe&gt; = withContext(Dispatchers.IO) {</b>
+<b class="fc">&nbsp;        Log.d(&quot;RecipeScraper&quot;, &quot;Starting scrape for URL: $url&quot;)</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            if (!url.startsWith(&quot;http&quot;)) {</b>
+<b class="fc">&nbsp;                Log.e(&quot;RecipeScraper&quot;, &quot;Invalid URL format: $url&quot;)</b>
+<b class="fc">&nbsp;                return@withContext WorkResult.Failure(</b>
+<b class="fc">&nbsp;                    code = ErrorCodes.INVALID_URL,</b>
+<b class="fc">&nbsp;                    message = &quot;Invalid link format. Please provide a valid website URL.&quot;</b>
+&nbsp;                )
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            val request = Request.Builder()</b>
+<b class="fc">&nbsp;                .url(url)</b>
+<b class="fc">&nbsp;                .header(&quot;User-Agent&quot;, userAgent)</b>
+<b class="fc">&nbsp;                .header(&quot;Accept&quot;, &quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8&quot;)</b>
+<b class="fc">&nbsp;                .header(&quot;Accept-Language&quot;, &quot;nl-BE,nl;q=0.9,en-US;q=0.8,en;q=0.7&quot;)</b>
+<b class="fc">&nbsp;                .header(&quot;Referer&quot;, &quot;https://www.google.com/&quot;)</b>
+<b class="fc">&nbsp;                .header(&quot;Cache-Control&quot;, &quot;no-cache&quot;)</b>
+<b class="fc">&nbsp;                .header(&quot;Pragma&quot;, &quot;no-cache&quot;)</b>
+<b class="fc">&nbsp;                .build()</b>
+&nbsp;
+<b class="fc">&nbsp;            val response = executeRequest(request)</b>
+&nbsp;            
+<b class="fc">&nbsp;            response.use { resp -&gt;</b>
+<b class="fc">&nbsp;                Log.d(&quot;RecipeScraper&quot;, &quot;Response received: ${resp.code} ${resp.message}&quot;)</b>
+&nbsp;                
+<b class="pc">&nbsp;                val html = resp.body?.string() ?: &quot;&quot;</b>
+<b class="fc">&nbsp;                Log.d(&quot;RecipeScraper&quot;, &quot;HTML received, length: ${html.length}&quot;)</b>
+<b class="pc">&nbsp;                if (html.length &gt; 500) {</b>
+<b class="nc">&nbsp;                    Log.d(&quot;RecipeScraper&quot;, &quot;Snippet: ${html.substring(0, 500)}&quot;)</b>
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                if (resp.isSuccessful) {</b>
+<b class="fc">&nbsp;                    val doc = Jsoup.parse(html, url)</b>
+<b class="fc">&nbsp;                    val recipe = parseDocument(url, doc)</b>
+<b class="fc">&nbsp;                    return@withContext WorkResult.Success(recipe)</b>
+&nbsp;                } else {
+&nbsp;                    // Even if unsuccessful (404/403), try to parse the HTML for Meta tags
+&nbsp;                    // as some sites (like XTRA) return metadata in the body of an error page
+<b class="pc">&nbsp;                    if (html.isNotBlank()) {</b>
+<b class="fc">&nbsp;                        val doc = Jsoup.parse(html, url)</b>
+<b class="fc">&nbsp;                        val recipe = parseDocument(url, doc)</b>
+&nbsp;                        
+&nbsp;                        // If we actually found a real title (not generic error text), treat as success
+<b class="fc">&nbsp;                        val isGenericErrorTitle = listOf(&quot;404&quot;, &quot;not found&quot;, &quot;error&quot;, &quot;forbidden&quot;, &quot;access denied&quot;)</b>
+<b class="fc">&nbsp;                            .any { recipe.title.lowercase().contains(it) }</b>
+&nbsp;
+<b class="pc">&nbsp;                        if (!isGenericErrorTitle &amp;&amp; recipe.title != URL(url).host) {</b>
+<b class="fc">&nbsp;                            Log.d(&quot;RecipeScraper&quot;, &quot;Recovered metadata from error page: ${recipe.title}&quot;)</b>
+<b class="fc">&nbsp;                            return@withContext WorkResult.Success(recipe)</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;
+<b class="pc">&nbsp;                    val msg = when (resp.code) {</b>
+<b class="fc">&nbsp;                        403 -&gt; &quot;Access denied (403). This website blocks automated access.&quot;</b>
+<b class="nc">&nbsp;                        404 -&gt; &quot;Recipe not found (404) at: $url&quot;</b>
+<b class="nc">&nbsp;                        else -&gt; &quot;The website returned an error (${resp.code}) for: $url&quot;</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    Log.e(&quot;RecipeScraper&quot;, &quot;Request failed: $msg&quot;)</b>
+<b class="fc">&nbsp;                    return@withContext WorkResult.Failure(</b>
+<b class="fc">&nbsp;                        code = ErrorCodes.NETWORK_ERROR,</b>
+<b class="fc">&nbsp;                        message = msg</b>
+&nbsp;                    )
+&nbsp;                }
+&nbsp;            }
+&nbsp;        } catch (e: UnknownHostException) {
+<b class="nc">&nbsp;            Log.e(&quot;RecipeScraper&quot;, &quot;Host not found: ${e.message}&quot;)</b>
+<b class="nc">&nbsp;            WorkResult.Failure(</b>
+<b class="nc">&nbsp;                code = ErrorCodes.NETWORK_ERROR,</b>
+<b class="nc">&nbsp;                message = &quot;Could not find the website. Please check your internet connection.&quot;,</b>
+<b class="nc">&nbsp;                cause = e</b>
+&nbsp;            )
+&nbsp;        } catch (e: java.net.SocketTimeoutException) {
+<b class="nc">&nbsp;            Log.e(&quot;RecipeScraper&quot;, &quot;Timeout: ${e.message}&quot;)</b>
+<b class="nc">&nbsp;            WorkResult.Failure(</b>
+<b class="nc">&nbsp;                code = ErrorCodes.NETWORK_ERROR,</b>
+<b class="nc">&nbsp;                message = &quot;The website took too long to respond. It might be down or very slow.&quot;,</b>
+<b class="nc">&nbsp;                cause = e</b>
+&nbsp;            )
+&nbsp;        } catch (e: Exception) {
+<b class="fc">&nbsp;            Log.e(&quot;RecipeScraper&quot;, &quot;Unexpected error: ${e.message}&quot;, e)</b>
+<b class="fc">&nbsp;            WorkResult.Failure(</b>
+<b class="fc">&nbsp;                code = ErrorCodes.UNKNOWN_ERROR,</b>
+<b class="pc">&nbsp;                message = &quot;Connection error: ${e.localizedMessage ?: &quot;Check the link and try again.&quot;}&quot;,</b>
+<b class="fc">&nbsp;                cause = e</b>
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private suspend fun executeRequest(request: Request): Response = suspendCancellableCoroutine { continuation -&gt;</b>
+<b class="fc">&nbsp;        val call = client.newCall(request)</b>
+<b class="fc">&nbsp;        continuation.invokeOnCancellation {</b>
+<b class="nc">&nbsp;            call.cancel()</b>
+&nbsp;        }
+<b class="fc">&nbsp;        call.enqueue(object : Callback {</b>
+&nbsp;            override fun onFailure(call: Call, e: IOException) {
+<b class="pc">&nbsp;                if (!continuation.isCancelled) {</b>
+<b class="fc">&nbsp;                    continuation.resumeWith(Result.failure(e))</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            override fun onResponse(call: Call, response: Response) {
+<b class="pc">&nbsp;                if (!continuation.isCancelled) {</b>
+<b class="fc">&nbsp;                    continuation.resume(response)</b>
+&nbsp;                } else {
+&nbsp;                    response.close()
+&nbsp;                }
+&nbsp;            }
+&nbsp;        })
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    internal fun parseDocument(url: String, doc: org.jsoup.nodes.Document): Recipe {
+<b class="fc">&nbsp;        val sourceApp = SourceExtractor.getCleanSourceName(url)</b>
+&nbsp;        
+&nbsp;        // 1. Title extraction order: og:title -&gt; h1 -&gt; &lt;title&gt; -&gt; host/domain
+<b class="fc">&nbsp;        var title = doc.select(&quot;meta[property=og:title]&quot;).attr(&quot;content&quot;).ifBlank {</b>
+<b class="pc">&nbsp;            doc.select(&quot;h1&quot;).first()?.text()?.ifBlank {</b>
+<b class="nc">&nbsp;                doc.title().ifBlank {</b>
+<b class="nc">&nbsp;                    URL(url).host</b>
+&nbsp;                }
+<b class="fc">&nbsp;            } ?: doc.title().ifBlank { URL(url).host }</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Clean up common &quot;404&quot; or &quot;Not Found&quot; generic titles
+<b class="fc">&nbsp;        val errorKeywords = listOf(&quot;404&quot;, &quot;not found&quot;, &quot;niet beschikbaar&quot;, &quot;niet gevonden&quot;, &quot;onbeschikbaar&quot;, &quot;error&quot;)</b>
+<b class="fc">&nbsp;        if (errorKeywords.any { title.lowercase().contains(it) }) {</b>
+<b class="pc">&nbsp;            title = if (sourceApp == &quot;Xtra&quot;) &quot;Xtra Recept&quot; else if (sourceApp == &quot;Colruyt&quot;) &quot;Colruyt Recept&quot; else URL(url).host</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // 2. Image extraction order: og:image -&gt; twitter:image -&gt; null
+<b class="fc">&nbsp;        val imageUrl = doc.select(&quot;meta[property=og:image]&quot;).attr(&quot;content&quot;).ifBlank {</b>
+<b class="fc">&nbsp;            doc.select(&quot;meta[name=twitter:image]&quot;).attr(&quot;content&quot;).ifBlank {</b>
+<b class="fc">&nbsp;                null</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return Recipe(</b>
+<b class="fc">&nbsp;            url = url,</b>
+<b class="fc">&nbsp;            title = HtmlSanitizer.sanitize(title),</b>
+<b class="fc">&nbsp;            imageUrl = imageUrl,</b>
+<b class="fc">&nbsp;            sourceApp = sourceApp</b>
+&nbsp;        )
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-05-31 11:37</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#A0522D</color>
+    <color name="background">#FDFBF7</color>
+    <color name="surface_card">#F3E5F5</color>
+    <color name="text_main">#121212</color>
+    <color name="text_muted">#424242</color>
+    <color name="error_border">#D32F2F</color>
+</resources>

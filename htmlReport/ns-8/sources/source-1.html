@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SourceExtractor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.svantheemsche.appetijt.data.security</a>
+</div>
+
+<h1>Coverage Summary for Class: SourceExtractor (com.svantheemsche.appetijt.data.security)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SourceExtractor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (24/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,5%
+  </span>
+  <span class="absValue">
+    (21/22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.svantheemsche.appetijt.data.security
+&nbsp;
+&nbsp;import java.net.URI
+&nbsp;import java.util.Locale
+&nbsp;
+&nbsp;object SourceExtractor {
+&nbsp;    private const val MAX_SOURCE_LENGTH = 30
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Securely parses a URL to extract a clean source name.
+&nbsp;     * Implements OWASP sanitization to prevent injection and UI overflows.
+&nbsp;     */
+&nbsp;    fun getCleanSourceName(url: String?): String {
+<b class="fc">&nbsp;        if (url.isNullOrBlank()) {</b>
+<b class="fc">&nbsp;            return &quot;Onbekend&quot;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        return try {
+<b class="fc">&nbsp;            val uri = URI(url.trim())</b>
+<b class="pc">&nbsp;            val host = uri.host ?: return &quot;Overig&quot;</b>
+<b class="fc">&nbsp;            val cleanHost = if (host.startsWith(&quot;www.&quot;)) host.substring(4) else host</b>
+&nbsp;
+<b class="fc">&nbsp;            var cleanSource = when {</b>
+<b class="fc">&nbsp;                cleanHost.contains(&quot;dagelijksekost&quot;) -&gt; &quot;Dagelijkse Kost&quot;</b>
+<b class="fc">&nbsp;                cleanHost.contains(&quot;colruyt&quot;) -&gt; &quot;Colruyt&quot;</b>
+<b class="pc">&nbsp;                cleanHost.contains(&quot;mijnxtra&quot;) || cleanHost.contains(&quot;bioplanet&quot;) -&gt; &quot;Xtra&quot;</b>
+<b class="pc">&nbsp;                cleanHost.contains(&quot;ah.&quot;) || cleanHost.contains(&quot;albertheijn&quot;) -&gt; &quot;Albert Heijn&quot;</b>
+<b class="pc">&nbsp;                cleanHost.contains(&quot;delhaize&quot;) -&gt; &quot;Delhaize&quot;</b>
+<b class="fc">&nbsp;                cleanHost.contains(&quot;njam&quot;) -&gt; &quot;Njam!&quot;</b>
+&nbsp;                else -&gt; {
+<b class="fc">&nbsp;                    val parts = cleanHost.split(&quot;.&quot;)</b>
+<b class="pc">&nbsp;                    if (parts.isNotEmpty()) {</b>
+<b class="fc">&nbsp;                        val rawName = parts[0]</b>
+<b class="fc">&nbsp;                        rawName.substring(0, 1).uppercase(Locale.ROOT) + rawName.substring(1)</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        &quot;Overig&quot;</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // OWASP Sanitization: Remove everything that is not a letter, digit, or space
+<b class="fc">&nbsp;            cleanSource = cleanSource.replace(Regex(&quot;[^a-zA-Z0-9 ]&quot;), &quot;&quot;)</b>
+&nbsp;
+&nbsp;            // Bound-check against buffer/UI overflows
+<b class="fc">&nbsp;            if (cleanSource.length &gt; MAX_SOURCE_LENGTH) {</b>
+<b class="fc">&nbsp;                cleanSource = cleanSource.substring(0, MAX_SOURCE_LENGTH)</b>
+&nbsp;            }
+&nbsp;
+<b class="pc">&nbsp;            if (cleanSource.trim().isEmpty()) &quot;Overig&quot; else cleanSource.trim()</b>
+&nbsp;        } catch (e: Exception) {
+&nbsp;            // Fail-safe: return &quot;Overig&quot; without logging the raw URL to prevent log-forging
+<b class="fc">&nbsp;            &quot;Overig&quot;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-05-31 11:37</div>
+</div>
+</body>
+</html>

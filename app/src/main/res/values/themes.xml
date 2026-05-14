@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.Appetijt" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="fontFamily">@font/appetijt_font</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorAccent">@color/primary</item>
+    </style>
+</resources>

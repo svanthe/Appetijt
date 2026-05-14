@@ -1,0 +1,384 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AppetijtDatabase_Impl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.svantheemsche.appetijt.data.local</a>
+</div>
+
+<h1>Coverage Summary for Class: AppetijtDatabase_Impl (com.svantheemsche.appetijt.data.local)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AppetijtDatabase_Impl</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18,2%
+  </span>
+  <span class="absValue">
+    (4/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55,3%
+  </span>
+  <span class="absValue">
+    (26/47)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AppetijtDatabase_Impl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (4/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (4/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    30,8%
+  </span>
+  <span class="absValue">
+    (16/52)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    70,6%
+  </span>
+  <span class="absValue">
+    (12/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21,1%
+  </span>
+  <span class="absValue">
+    (8/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42,4%
+  </span>
+  <span class="absValue">
+    (42/99)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.svantheemsche.appetijt.data.local;
+&nbsp;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.room.DatabaseConfiguration;
+&nbsp;import androidx.room.InvalidationTracker;
+&nbsp;import androidx.room.RoomDatabase;
+&nbsp;import androidx.room.RoomOpenHelper;
+&nbsp;import androidx.room.migration.AutoMigrationSpec;
+&nbsp;import androidx.room.migration.Migration;
+&nbsp;import androidx.room.util.DBUtil;
+&nbsp;import androidx.room.util.TableInfo;
+&nbsp;import androidx.sqlite.db.SupportSQLiteDatabase;
+&nbsp;import androidx.sqlite.db.SupportSQLiteOpenHelper;
+&nbsp;import com.svantheemsche.appetijt.data.local.dao.MealEntryDao;
+&nbsp;import com.svantheemsche.appetijt.data.local.dao.MealEntryDao_Impl;
+&nbsp;import com.svantheemsche.appetijt.data.local.dao.RecipeDao;
+&nbsp;import com.svantheemsche.appetijt.data.local.dao.RecipeDao_Impl;
+&nbsp;import java.lang.Class;
+&nbsp;import java.lang.Override;
+&nbsp;import java.lang.String;
+&nbsp;import java.lang.SuppressWarnings;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;
+&nbsp;@Generated(&quot;androidx.room.RoomProcessor&quot;)
+&nbsp;@SuppressWarnings({&quot;unchecked&quot;, &quot;deprecation&quot;})
+<b class="fc">&nbsp;public final class AppetijtDatabase_Impl extends AppetijtDatabase {</b>
+&nbsp;  private volatile RecipeDao _recipeDao;
+&nbsp;
+&nbsp;  private volatile MealEntryDao _mealEntryDao;
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
+<b class="fc">&nbsp;    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {</b>
+&nbsp;      @Override
+&nbsp;      public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
+<b class="fc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `recipes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `url` TEXT NOT NULL, `title` TEXT NOT NULL, `imageUrl` TEXT, `sourceApp` TEXT)&quot;);</b>
+<b class="fc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `meal_plan` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `recipeId` INTEGER NOT NULL, FOREIGN KEY(`recipeId`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )&quot;);</b>
+<b class="fc">&nbsp;        db.execSQL(&quot;CREATE INDEX IF NOT EXISTS `index_meal_plan_date` ON `meal_plan` (`date`)&quot;);</b>
+<b class="fc">&nbsp;        db.execSQL(&quot;CREATE UNIQUE INDEX IF NOT EXISTS `index_meal_plan_date_recipeId` ON `meal_plan` (`date`, `recipeId`)&quot;);</b>
+<b class="fc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)&quot;);</b>
+<b class="fc">&nbsp;        db.execSQL(&quot;INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, &#39;e862937afb3e3cefd658a492cfbf1513&#39;)&quot;);</b>
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `recipes`&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `meal_plan`&quot;);</b>
+<b class="nc">&nbsp;        final List&lt;? extends RoomDatabase.Callback&gt; _callbacks = mCallbacks;</b>
+<b class="nc">&nbsp;        if (_callbacks != null) {</b>
+<b class="nc">&nbsp;          for (RoomDatabase.Callback _callback : _callbacks) {</b>
+<b class="nc">&nbsp;            _callback.onDestructiveMigration(db);</b>
+&nbsp;          }
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onCreate(@NonNull final SupportSQLiteDatabase db) {
+<b class="fc">&nbsp;        final List&lt;? extends RoomDatabase.Callback&gt; _callbacks = mCallbacks;</b>
+<b class="pc">&nbsp;        if (_callbacks != null) {</b>
+<b class="pc">&nbsp;          for (RoomDatabase.Callback _callback : _callbacks) {</b>
+<b class="nc">&nbsp;            _callback.onCreate(db);</b>
+&nbsp;          }
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onOpen(@NonNull final SupportSQLiteDatabase db) {
+<b class="fc">&nbsp;        mDatabase = db;</b>
+<b class="fc">&nbsp;        db.execSQL(&quot;PRAGMA foreign_keys = ON&quot;);</b>
+<b class="fc">&nbsp;        internalInitInvalidationTracker(db);</b>
+<b class="fc">&nbsp;        final List&lt;? extends RoomDatabase.Callback&gt; _callbacks = mCallbacks;</b>
+<b class="pc">&nbsp;        if (_callbacks != null) {</b>
+<b class="pc">&nbsp;          for (RoomDatabase.Callback _callback : _callbacks) {</b>
+<b class="nc">&nbsp;            _callback.onOpen(db);</b>
+&nbsp;          }
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onPreMigrate(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        DBUtil.dropFtsSyncTriggers(db);</b>
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onPostMigrate(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;      }</b>
+&nbsp;
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public RoomOpenHelper.ValidationResult onValidateSchema(
+&nbsp;          @NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsRecipes = new HashMap&lt;String, TableInfo.Column&gt;(5);</b>
+<b class="nc">&nbsp;        _columnsRecipes.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsRecipes.put(&quot;url&quot;, new TableInfo.Column(&quot;url&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsRecipes.put(&quot;title&quot;, new TableInfo.Column(&quot;title&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsRecipes.put(&quot;imageUrl&quot;, new TableInfo.Column(&quot;imageUrl&quot;, &quot;TEXT&quot;, false, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsRecipes.put(&quot;sourceApp&quot;, new TableInfo.Column(&quot;sourceApp&quot;, &quot;TEXT&quot;, false, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysRecipes = new HashSet&lt;TableInfo.ForeignKey&gt;(0);</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesRecipes = new HashSet&lt;TableInfo.Index&gt;(0);</b>
+<b class="nc">&nbsp;        final TableInfo _infoRecipes = new TableInfo(&quot;recipes&quot;, _columnsRecipes, _foreignKeysRecipes, _indicesRecipes);</b>
+<b class="nc">&nbsp;        final TableInfo _existingRecipes = TableInfo.read(db, &quot;recipes&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoRecipes.equals(_existingRecipes)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;recipes(com.svantheemsche.appetijt.data.local.entity.RecipeEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoRecipes + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingRecipes);
+&nbsp;        }
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsMealPlan = new HashMap&lt;String, TableInfo.Column&gt;(3);</b>
+<b class="nc">&nbsp;        _columnsMealPlan.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsMealPlan.put(&quot;date&quot;, new TableInfo.Column(&quot;date&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsMealPlan.put(&quot;recipeId&quot;, new TableInfo.Column(&quot;recipeId&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysMealPlan = new HashSet&lt;TableInfo.ForeignKey&gt;(1);</b>
+<b class="nc">&nbsp;        _foreignKeysMealPlan.add(new TableInfo.ForeignKey(&quot;recipes&quot;, &quot;CASCADE&quot;, &quot;NO ACTION&quot;, Arrays.asList(&quot;recipeId&quot;), Arrays.asList(&quot;id&quot;)));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesMealPlan = new HashSet&lt;TableInfo.Index&gt;(2);</b>
+<b class="nc">&nbsp;        _indicesMealPlan.add(new TableInfo.Index(&quot;index_meal_plan_date&quot;, false, Arrays.asList(&quot;date&quot;), Arrays.asList(&quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        _indicesMealPlan.add(new TableInfo.Index(&quot;index_meal_plan_date_recipeId&quot;, true, Arrays.asList(&quot;date&quot;, &quot;recipeId&quot;), Arrays.asList(&quot;ASC&quot;, &quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        final TableInfo _infoMealPlan = new TableInfo(&quot;meal_plan&quot;, _columnsMealPlan, _foreignKeysMealPlan, _indicesMealPlan);</b>
+<b class="nc">&nbsp;        final TableInfo _existingMealPlan = TableInfo.read(db, &quot;meal_plan&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoMealPlan.equals(_existingMealPlan)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;meal_plan(com.svantheemsche.appetijt.data.local.entity.MealEntryEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoMealPlan + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingMealPlan);
+&nbsp;        }
+<b class="nc">&nbsp;        return new RoomOpenHelper.ValidationResult(true, null);</b>
+&nbsp;      }
+&nbsp;    }, &quot;e862937afb3e3cefd658a492cfbf1513&quot;, &quot;e2ff9e8d2856b04436ca988ffba375c7&quot;);
+<b class="fc">&nbsp;    final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();</b>
+<b class="fc">&nbsp;    final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);</b>
+<b class="fc">&nbsp;    return _helper;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  protected InvalidationTracker createInvalidationTracker() {
+<b class="fc">&nbsp;    final HashMap&lt;String, String&gt; _shadowTablesMap = new HashMap&lt;String, String&gt;(0);</b>
+<b class="fc">&nbsp;    final HashMap&lt;String, Set&lt;String&gt;&gt; _viewTables = new HashMap&lt;String, Set&lt;String&gt;&gt;(0);</b>
+<b class="fc">&nbsp;    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, &quot;recipes&quot;,&quot;meal_plan&quot;);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public void clearAllTables() {
+<b class="nc">&nbsp;    super.assertNotMainThread();</b>
+<b class="nc">&nbsp;    final SupportSQLiteDatabase _db = super.getOpenHelper().getWritableDatabase();</b>
+<b class="nc">&nbsp;    final boolean _supportsDeferForeignKeys = android.os.Build.VERSION.SDK_INT &gt;= android.os.Build.VERSION_CODES.LOLLIPOP;</b>
+&nbsp;    try {
+<b class="nc">&nbsp;      if (!_supportsDeferForeignKeys) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;PRAGMA foreign_keys = FALSE&quot;);</b>
+&nbsp;      }
+<b class="nc">&nbsp;      super.beginTransaction();</b>
+<b class="nc">&nbsp;      if (_supportsDeferForeignKeys) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;PRAGMA defer_foreign_keys = TRUE&quot;);</b>
+&nbsp;      }
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `recipes`&quot;);</b>
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `meal_plan`&quot;);</b>
+<b class="nc">&nbsp;      super.setTransactionSuccessful();</b>
+&nbsp;    } finally {
+<b class="nc">&nbsp;      super.endTransaction();</b>
+<b class="nc">&nbsp;      if (!_supportsDeferForeignKeys) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;PRAGMA foreign_keys = TRUE&quot;);</b>
+&nbsp;      }
+<b class="nc">&nbsp;      _db.query(&quot;PRAGMA wal_checkpoint(FULL)&quot;).close();</b>
+<b class="nc">&nbsp;      if (!_db.inTransaction()) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;VACUUM&quot;);</b>
+&nbsp;      }
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  protected Map&lt;Class&lt;?&gt;, List&lt;Class&lt;?&gt;&gt;&gt; getRequiredTypeConverters() {
+<b class="fc">&nbsp;    final HashMap&lt;Class&lt;?&gt;, List&lt;Class&lt;?&gt;&gt;&gt; _typeConvertersMap = new HashMap&lt;Class&lt;?&gt;, List&lt;Class&lt;?&gt;&gt;&gt;();</b>
+<b class="fc">&nbsp;    _typeConvertersMap.put(RecipeDao.class, RecipeDao_Impl.getRequiredConverters());</b>
+<b class="fc">&nbsp;    _typeConvertersMap.put(MealEntryDao.class, MealEntryDao_Impl.getRequiredConverters());</b>
+<b class="fc">&nbsp;    return _typeConvertersMap;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  public Set&lt;Class&lt;? extends AutoMigrationSpec&gt;&gt; getRequiredAutoMigrationSpecs() {
+<b class="fc">&nbsp;    final HashSet&lt;Class&lt;? extends AutoMigrationSpec&gt;&gt; _autoMigrationSpecsSet = new HashSet&lt;Class&lt;? extends AutoMigrationSpec&gt;&gt;();</b>
+<b class="fc">&nbsp;    return _autoMigrationSpecsSet;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  public List&lt;Migration&gt; getAutoMigrations(
+&nbsp;      @NonNull final Map&lt;Class&lt;? extends AutoMigrationSpec&gt;, AutoMigrationSpec&gt; autoMigrationSpecs) {
+<b class="fc">&nbsp;    final List&lt;Migration&gt; _autoMigrations = new ArrayList&lt;Migration&gt;();</b>
+<b class="fc">&nbsp;    return _autoMigrations;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public RecipeDao recipeDao() {
+<b class="pc">&nbsp;    if (_recipeDao != null) {</b>
+<b class="nc">&nbsp;      return _recipeDao;</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      synchronized(this) {</b>
+<b class="pc">&nbsp;        if(_recipeDao == null) {</b>
+<b class="fc">&nbsp;          _recipeDao = new RecipeDao_Impl(this);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return _recipeDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public MealEntryDao mealEntryDao() {
+<b class="pc">&nbsp;    if (_mealEntryDao != null) {</b>
+<b class="nc">&nbsp;      return _mealEntryDao;</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      synchronized(this) {</b>
+<b class="pc">&nbsp;        if(_mealEntryDao == null) {</b>
+<b class="fc">&nbsp;          _mealEntryDao = new MealEntryDao_Impl(this);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return _mealEntryDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-05-31 11:37</div>
+</div>
+</body>
+</html>

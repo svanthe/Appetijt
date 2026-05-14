@@ -1,0 +1,11 @@
+.gitattributes
+.idea/
+.vscode/
+.gradle/
+build
+app/build
+data/build
+domain/build
+ui/build
+*.hprof
+.aider*
