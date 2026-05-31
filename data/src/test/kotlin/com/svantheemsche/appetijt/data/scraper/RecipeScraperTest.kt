@@ -3,6 +3,7 @@ package com.svantheemsche.appetijt.data.scraper
 import com.svantheemsche.appetijt.domain.model.ErrorCodes
 import com.svantheemsche.appetijt.domain.model.WorkResult
 import kotlinx.coroutines.runBlocking
+import okhttp3.ConnectionSpec
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.jsoup.Jsoup
@@ -18,7 +19,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class RecipeScraperTest {
 
-    private val scraper = RecipeScraper()
+    private val scraper = RecipeScraper(listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT))
     private val testUrl = "https://example.com/recipe-1"
     private lateinit var mockWebServer: MockWebServer
 

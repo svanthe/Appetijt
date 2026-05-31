@@ -21,7 +21,6 @@ package com.svantheemsche.appetijt
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,6 +34,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.svantheemsche.appetijt.data.local.AppetijtDatabase
 import com.svantheemsche.appetijt.data.repository.MealPlanRepositoryImpl
 import com.svantheemsche.appetijt.data.scraper.RecipeScraper
@@ -50,6 +51,7 @@ import com.svantheemsche.appetijt.ui.theme.AppetijtTheme
 import com.svantheemsche.appetijt.ui.weekmenu.MainViewModel
 import com.svantheemsche.appetijt.ui.weekmenu.WeekMenuScreen
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
@@ -59,13 +61,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("MainActivity", "onCreate called")
+        Timber.d("onCreate called")
         
-        // Theme initialization
-        val prefs = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        val savedTheme = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        AppCompatDelegate.setDefaultNightMode(savedTheme)
-
+        initializeTheme()
         initializeDependencies()
 
         mainViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
@@ -96,9 +94,31 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun initializeTheme() {
+        val prefs = try {
+            val masterKey = MasterKey.Builder(this)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build()
+
+            EncryptedSharedPreferences.create(
+                this,
+                "app_settings",
+                masterKey,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "EncryptedSharedPreferences failed, falling back to standard")
+            getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        }
+
+        val savedTheme = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        AppCompatDelegate.setDefaultNightMode(savedTheme)
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d("MainActivity", "onNewIntent called - Reusing existing instance")
+        Timber.d("onNewIntent called - Reusing existing instance")
         if (intent?.action == Intent.ACTION_SEND && intent.type == "text/plain") {
             handleShareIntent(intent)
         }
@@ -120,8 +140,7 @@ class MainActivity : ComponentActivity() {
         val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
         val sharedSubject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
         
-        Log.d("MainActivity", "Shared text received: $sharedText")
-        Log.d("MainActivity", "Shared subject received: $sharedSubject")
+        Timber.d("Shared text and subject received")
         
         if (sharedText != null) {
             val date = mainViewModel.state.value.selectedDate
