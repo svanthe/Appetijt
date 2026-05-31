@@ -18,7 +18,7 @@
 
 package com.svantheemsche.appetijt.data.scraper
 
-import android.util.Log
+import com.svantheemsche.appetijt.data.BuildConfig
 import com.svantheemsche.appetijt.data.security.SourceExtractor
 import com.svantheemsche.appetijt.data.utils.HtmlSanitizer
 import com.svantheemsche.appetijt.domain.model.ErrorCodes
@@ -36,16 +36,19 @@ import okhttp3.Response
 import okhttp3.TlsVersion
 import okhttp3.logging.HttpLoggingInterceptor
 import org.jsoup.Jsoup
+import timber.log.Timber
 import java.io.IOException
 import java.net.URL
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 
-class RecipeScraper {
+class RecipeScraper(
+    customConnectionSpecs: List<ConnectionSpec>? = null
+) {
 
     private val loggingInterceptor = HttpLoggingInterceptor { message ->
-        Log.d("RecipeScraperNetwork", message)
+        Timber.tag("RecipeScraperNetwork").d(message)
     }.apply {
         level = HttpLoggingInterceptor.Level.BASIC
     }
@@ -57,7 +60,13 @@ class RecipeScraper {
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .connectionSpecs(listOf(connectionSpec, ConnectionSpec.CLEARTEXT))
+        .connectionSpecs(
+            customConnectionSpecs ?: if (BuildConfig.DEBUG) {
+                listOf(connectionSpec, ConnectionSpec.CLEARTEXT)
+            } else {
+                listOf(connectionSpec)
+            }
+        )
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .followRedirects(true)
@@ -68,10 +77,10 @@ class RecipeScraper {
     private val userAgent = "Mozilla/5.0 (Linux; Android 13; SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
 
     suspend fun scrape(url: String): WorkResult<Recipe> = withContext(Dispatchers.IO) {
-        Log.d("RecipeScraper", "Starting scrape for URL: $url")
+        Timber.d("Starting scrape for URL: $url")
         try {
             if (!url.startsWith("http")) {
-                Log.e("RecipeScraper", "Invalid URL format: $url")
+                Timber.e("Invalid URL format: $url")
                 return@withContext WorkResult.Failure(
                     code = ErrorCodes.INVALID_URL,
                     message = "Invalid link format. Please provide a valid website URL."
@@ -91,13 +100,7 @@ class RecipeScraper {
             val response = executeRequest(request)
             
             response.use { resp ->
-                Log.d("RecipeScraper", "Response received: ${resp.code} ${resp.message}")
-                
                 val html = resp.body?.string() ?: ""
-                Log.d("RecipeScraper", "HTML received, length: ${html.length}")
-                if (html.length > 500) {
-                    Log.d("RecipeScraper", "Snippet: ${html.substring(0, 500)}")
-                }
 
                 if (resp.isSuccessful) {
                     val doc = Jsoup.parse(html, url)
@@ -115,17 +118,17 @@ class RecipeScraper {
                             .any { recipe.title.lowercase().contains(it) }
 
                         if (!isGenericErrorTitle && recipe.title != URL(url).host) {
-                            Log.d("RecipeScraper", "Recovered metadata from error page: ${recipe.title}")
+                            Timber.d("Recovered metadata from error page: ${recipe.title}")
                             return@withContext WorkResult.Success(recipe)
                         }
                     }
 
                     val msg = when (resp.code) {
-                        403 -> "Access denied (403). This website blocks automated access."
-                        404 -> "Recipe not found (404) at: $url"
-                        else -> "The website returned an error (${resp.code}) for: $url"
+                        403 -> "This website doesn't allow saving recipes automatically."
+                        404 -> "The recipe could not be found."
+                        else -> "The website encountered an error. Please try again later."
                     }
-                    Log.e("RecipeScraper", "Request failed: $msg")
+                    Timber.e("Request failed with code ${resp.code}")
                     return@withContext WorkResult.Failure(
                         code = ErrorCodes.NETWORK_ERROR,
                         message = msg
@@ -133,28 +136,28 @@ class RecipeScraper {
                 }
             }
         } catch (e: UnknownHostException) {
-            Log.e("RecipeScraper", "Host not found: ${e.message}")
+            Timber.e("Host not found: ${e.message}")
             WorkResult.Failure(
                 code = ErrorCodes.NETWORK_ERROR,
                 message = "Could not find the website. Please check your internet connection.",
                 cause = e
             )
         } catch (e: java.net.SocketTimeoutException) {
-            Log.e("RecipeScraper", "Timeout: ${e.message}")
+            Timber.e("Timeout: ${e.message}")
             WorkResult.Failure(
                 code = ErrorCodes.NETWORK_ERROR,
                 message = "The website took too long to respond. It might be down or very slow.",
                 cause = e
             )
         } catch (e: IOException) {
-            Log.e("RecipeScraper", "Network error: ${e.message}")
+            Timber.e("Network error: ${e.message}")
             WorkResult.Failure(
                 code = ErrorCodes.NETWORK_ERROR,
                 message = "Network error while connecting to the website.",
                 cause = e
             )
         } catch (e: Exception) {
-            Log.e("RecipeScraper", "Unexpected error: ${e.message}", e)
+            Timber.e(e, "Unexpected error: ${e.message}")
             WorkResult.Failure(
                 code = ErrorCodes.UNKNOWN_ERROR,
                 message = "Connection error: ${e.localizedMessage ?: "Check the link and try again."}",

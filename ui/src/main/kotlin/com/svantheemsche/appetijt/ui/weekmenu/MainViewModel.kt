@@ -18,7 +18,6 @@
 
 package com.svantheemsche.appetijt.ui.weekmenu
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.svantheemsche.appetijt.domain.model.Recipe
@@ -34,6 +33,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -115,7 +115,7 @@ class MainViewModel(
             if (result is WorkResult.Success) {
                 selectDay(date)
             } else if (result is WorkResult.Failure) {
-                Log.e("MainViewModel", "Failed to save recipe: ${result.message}", result.cause)
+                Timber.e(result.cause, "Failed to save recipe: ${result.message}")
                 _state.update { it.copy(isLoading = false, errorMessage = result.message) }
             }
         }

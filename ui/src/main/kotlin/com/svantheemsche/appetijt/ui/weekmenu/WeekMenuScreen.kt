@@ -21,7 +21,6 @@ package com.svantheemsche.appetijt.ui.weekmenu
 import android.R
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -77,6 +76,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.svantheemsche.appetijt.domain.model.Recipe
 import com.svantheemsche.appetijt.ui.components.RecipeCard
 import com.svantheemsche.appetijt.ui.components.RecipeLibraryDialog
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -206,7 +206,7 @@ fun WeekMenuScreen(
                             }
                             context.startActivity(intent)
                         } catch (e: Exception) {
-                            Log.e("WeekMenuScreen", "Failed to open recipe URL", e)
+                            Timber.e(e, "Failed to open recipe URL")
                         }
                     }
                 )

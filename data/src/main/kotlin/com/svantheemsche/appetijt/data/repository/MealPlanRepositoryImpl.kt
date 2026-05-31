@@ -26,7 +26,6 @@ import com.svantheemsche.appetijt.data.scraper.RecipeScraper
 import com.svantheemsche.appetijt.data.share.SharedTextUrlExtractor
 import com.svantheemsche.appetijt.data.security.SourceExtractor
 import com.svantheemsche.appetijt.data.utils.HtmlSanitizer
-import android.util.Log
 import com.svantheemsche.appetijt.domain.model.ErrorCodes
 import com.svantheemsche.appetijt.domain.model.Recipe
 import com.svantheemsche.appetijt.domain.model.RecipeSource
@@ -34,6 +33,7 @@ import com.svantheemsche.appetijt.domain.model.WorkResult
 import com.svantheemsche.appetijt.domain.repository.MealPlanRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.net.URL
 import java.time.LocalDate
 
@@ -63,7 +63,7 @@ class MealPlanRepositoryImpl(
             scrapeResult.data
         } else {
             // Fallback: Create a basic recipe entry if scraping fails so the user isn't blocked
-            Log.w("MealPlanRepo", "Scraping failed, using fallback for URL: $url")
+            Timber.w("Scraping failed, using fallback for URL: $url")
             
             val sourceApp = SourceExtractor.getCleanSourceName(url)
             val displayTitle = when (sourceApp) {
@@ -81,7 +81,7 @@ class MealPlanRepositoryImpl(
 
         // 3. Save to Database
         return try {
-            Log.d("MealPlanRepo", "Saving recipe to database: ${metadata.title}")
+            Timber.d("Saving recipe to database: ${metadata.title}")
             val recipeId = recipeDao.insertRecipe(
                 RecipeEntity(
                     url = metadata.url,
@@ -97,10 +97,10 @@ class MealPlanRepositoryImpl(
                     recipeId = recipeId
                 )
             )
-            Log.d("MealPlanRepo", "Successfully saved recipe with ID: $recipeId for date: $date")
+            Timber.d("Successfully saved recipe with ID: $recipeId for date: $date")
             WorkResult.Success(Unit)
         } catch (e: Exception) {
-            Log.e("MealPlanRepo", "Database error while saving: ${e.message}", e)
+            Timber.e(e, "Database error while saving")
             WorkResult.Failure(
                 code = ErrorCodes.DATABASE_ERROR,
                 message = "Failed to save recipe: ${e.localizedMessage}",

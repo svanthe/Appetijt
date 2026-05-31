@@ -25,6 +25,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"
@@ -47,6 +48,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.material)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.timber)
 
     // Compose Dependencies
     implementation(libs.compose.ui)

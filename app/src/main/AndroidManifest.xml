@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".AppetijtApplication"
         android:allowBackup="true"
         android:label="Appetijt"
         android:icon="@drawable/ic_launcher_koksmuts"
